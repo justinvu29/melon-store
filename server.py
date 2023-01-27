@@ -69,27 +69,22 @@ def empty_cart():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-   """Log user into site."""
    form = LoginForm(request.form)
 
    if form.validate_on_submit():
-      # Form has been submitted with valid data
       username = form.username.data
       password = form.password.data
 
-      # Check to see if a registered user exists with this username
       user = customers.get_by_username(username)
 
       if not user or user['password'] != password:
             flash("Invalid username or password")
             return redirect('/login')
 
-      # Store username in session to keep track of logged in user
       session["username"] = user['username']
       flash("Logged in.")
       return redirect("/melons")
 
-   # Form has not been submitted or data was not valid
    return render_template("login.html", form=form)
 
 @app.route("/logout")
